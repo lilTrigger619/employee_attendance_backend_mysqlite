@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import Admin_config_serializer
@@ -19,3 +19,9 @@ class Create_employee(CreateAPIView):
     serializer_class=User_serializer
     permission_classes=[IsAuthenticated]
     queryset = User.objects.all()
+
+class Get_all_users(ListAPIView):
+    serializer_class=User_serializer
+    permission_classes=[IsAuthenticated]
+    queryset=User.objects.all()
+

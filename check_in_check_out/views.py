@@ -1,11 +1,11 @@
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.schemas.coreapi import serializers
 from .serializers import Check_serializer, User_serializer
 from .models import Check_in, Check_out
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.db.models import Q 
 
 
@@ -55,3 +55,20 @@ class Create_a_log(CreateAPIView):
             _ser.save()
             return Response(_ser.data, status=HTTP_200_OK)
         return Response(_ser.errors, status=HTTP_400_BAD_REQUEST)
+
+# get today's logins.
+class Get_today_signin_view(RetrieveAPIView):
+    serializer_class = Check_serializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        user = self.request.user
+        return Check_in.objects.filter(owner=user, date_time__date=date.today()).last()
+
+class Get_today_signout_view(RetrieveAPIView):
+    serializer_class = Check_serializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        user = self.request.user
+        return Check_out.objects.filter(owner=user, date_time__date=date.today()).last()

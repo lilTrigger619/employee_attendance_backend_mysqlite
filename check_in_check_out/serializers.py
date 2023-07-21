@@ -11,6 +11,7 @@ class User_serializer(serializers.ModelSerializer):
 
 class Check_serializer(serializers.ModelSerializer):
     owner = User_serializer(read_only=True)
+    lateness= serializers.CharField(read_only=True)
     class Meta:
         model = Check_in
         fields = "__all__"
